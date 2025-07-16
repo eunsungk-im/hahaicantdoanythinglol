@@ -1,0 +1,82 @@
+import React, { useState } from "react";
+import { createRoot } from "react-dom/client";
+
+function App() {
+  const [voltage, setVoltage] = useState(5);
+  const [resistance, setResistance] = useState(10);
+  const [current, setCurrent] = useState(null);
+
+  const handleSimulate = () => {
+    if (resistance === 0) {
+      alert("저항은 0이 될 수 없습니다.");
+      return;
+    }
+    const I = voltage / resistance;
+    setCurrent(I.toFixed(2));
+  };
+
+  return (
+    <div style={{ fontFamily: "Arial", padding: "20px", maxWidth: "600px" }}>
+      <h1>🔌 간단한 회로 시뮬레이터</h1>
+
+      <div style={{ marginBottom: "10px" }}>
+        <label>
+          전압 (V):
+          <input
+            type="number"
+            value={voltage}
+            onChange={(e) => setVoltage(Number(e.target.value))}
+            style={{ marginLeft: "10px", width: "80px" }}
+          />
+        </label>
+      </div>
+
+      <div style={{ marginBottom: "10px" }}>
+        <label>
+          저항 (Ω):
+          <input
+            type="number"
+            value={resistance}
+            onChange={(e) => setResistance(Number(e.target.value))}
+            style={{ marginLeft: "10px", width: "80px" }}
+          />
+        </label>
+      </div>
+
+      <button onClick={handleSimulate} style={{ marginBottom: "20px" }}>
+        전류 계산
+      </button>
+
+      {current !== null && (
+        <div style={{ fontSize: "18px", marginBottom: "20px" }}>
+          🔋 <strong>전류:</strong> {current} A
+        </div>
+      )}
+
+      <svg width="500" height="150">
+        {/* 배터리 */}
+        <line x1="50" y1="75" x2="70" y2="75" stroke="black" strokeWidth="2" />
+        <line x1="70" y1="60" x2="70" y2="90" stroke="black" strokeWidth="4" />
+        <line x1="75" y1="65" x2="75" y2="85" stroke="black" strokeWidth="1" />
+
+        {/* 전선 */}
+        <line x1="75" y1="75" x2="150" y2="75" stroke="black" strokeWidth="2" />
+
+        {/* 저항 */}
+        <rect x="150" y="65" width="60" height="20" fill="#f90" stroke="black" />
+        <text x="155" y="60" fontSize="12">
+          {resistance}Ω
+        </text>
+
+        {/* 전선 계속 */}
+        <line x1="210" y1="75" x2="300" y2="75" stroke="black" strokeWidth="2" />
+        <line x1="300" y1="75" x2="300" y2="120" stroke="black" strokeWidth="2" />
+        <line x1="300" y1="120" x2="50" y2="120" stroke="black" strokeWidth="2" />
+        <line x1="50" y1="120" x2="50" y2="75" stroke="black" strokeWidth="2" />
+      </svg>
+    </div>
+  );
+}
+
+const root = createRoot(document.getElementById("root"));
+root.render(<App />);
